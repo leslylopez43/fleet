@@ -12,24 +12,6 @@
         <input type="date" id="end_date" name="end_date" required>
         <button type="submit">Print</button>
     </form>
-    {% if hires %}
-    <h2>Hire Agreements</h2>
-    <table border="1">
-        <tr>
-            <th>Registration Number</th>
-            <th>Customer Name</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-        </tr>
-        {% for hire in hires %}
-        <tr>
-            <td>{{ hire[0] }}</td>
-            <td>{{ hire[1] }}</td>
-            <td>{{ hire[2] }}</td>
-            <td>{{ hire[3] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-    {% endif %}
     <a href="/">Back to Home</a>
 </body>
+</html>

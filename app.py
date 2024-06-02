@@ -1,5 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_file
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 import sqlite3
+import io
 
 app = Flask(__name__)
 
@@ -7,27 +10,27 @@ def init_db():
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
     cursor.execute('''
-    CREATE TABLE IF NOT EXISTS vehicle (
-        id INTEGER PRIMARY KEY,
-        registration_number TEXT NOT NULL
-    )
+        CREATE TABLE IF NOT EXISTS vehicle (
+            id INTEGER PRIMARY KEY,
+            registration_number TEXT NOT NULL
+        )
     ''')
     cursor.execute('''
-    CREATE TABLE IF NOT EXISTS customer (
-        id INTEGER PRIMARY KEY,
-        name TEXT NOT NULL
-    )
+        CREATE TABLE IF NOT EXISTS customer (
+            id INTEGER PRIMARY KEY,
+            name TEXT NOT NULL
+        )
     ''')
     cursor.execute('''
-    CREATE TABLE IF NOT EXISTS hire (
-        id INTEGER PRIMARY KEY,
-        vehicle_id INTEGER,
-        customer_id INTEGER,
-        start_date TEXT,
-        end_date TEXT,
-        FOREIGN KEY (vehicle_id) REFERENCES vehicle(id),
-        FOREIGN KEY (customer_id) REFERENCES customer(id)
-    )
+        CREATE TABLE IF NOT EXISTS hire (
+            id INTEGER PRIMARY KEY,
+            vehicle_id INTEGER,
+            customer_id INTEGER,
+            start_date TEXT,
+            end_date TEXT,
+            FOREIGN KEY(vehicle_id) REFERENCES vehicle(id),
+            FOREIGN KEY(customer_id) REFERENCES customer(id)
+        )
     ''')
     conn.commit()
     conn.close()
@@ -97,7 +100,35 @@ def print_hire():
         ''', (start_date, end_date))
         hires = cursor.fetchall()
         conn.close()
-        return render_template('print_hire.html', hires=hires)
+
+        buffer = io.BytesIO()
+        c = canvas.Canvas(buffer, pagesize=letter)
+        width, height = letter
+
+        # Add background image
+        c.drawImage("static/background_template.jpg", 0, 0, width=width, height=height)
+
+        # Draw text on the canvas
+        y = height - 100
+        c.setFont("Helvetica", 12)
+        c.drawString(100, y, "Hire Agreements")
+        y -= 20
+
+        for hire in hires:
+            c.drawString(100, y, f"Registration Number: {hire[0]}")
+            y -= 15
+            c.drawString(100, y, f"Customer Name: {hire[1]}")
+            y -= 15
+            c.drawString(100, y, f"Start Date: {hire[2]}")
+            y -= 15
+            c.drawString(100, y, f"End Date: {hire[3]}")
+            y -= 30
+
+        c.save()
+
+        buffer.seek(0)
+        return send_file(buffer, as_attachment=True, download_name="hire_agreements.pdf", mimetype='application/pdf')
+
     return render_template('print_hire.html', hires=None)
 
 if __name__ == '__main__':
