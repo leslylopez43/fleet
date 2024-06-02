@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Hire Agreement</title>
+</head>
+<body>
+    <h1>Add Hire Agreement</h1>
+    <form method="POST">
+        <label for="vehicle_id">Vehicle:</label>
+        <select id="vehicle_id" name="vehicle_id" required>
+            {% for vehicle in vehicles %}
+            <option value="{{ vehicle[0] }}">{{ vehicle[1] }}</option>
+            {% endfor %}
+        </select>
+        <label for="customer_id">Customer:</label>
+        <select id="customer_id" name="customer_id" required>
+            {% for customer in customers %}
+            <option value="{{ customer[0] }}">{{ customer[1] }}</option>
+            {% endfor %}
+        </select>
+        <label for="start_date">Start Date:</label>
+        <input type="date" id="start_date" name="start_date" required>
+        <label for="end_date">End Date:</label>
+        <input type="date" id="end_date" name="end_date" required>
+        <button type="submit">Add Hire Agreement</button>
+    </form>
+    <a href="/">Back to Home</a>
+</body>
+</html>
