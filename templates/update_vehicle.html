@@ -1,16 +1,22 @@
-<tbody>
-    {% for vehicle in vehicles %}
-    <tr>
-        <td>{{ vehicle.id }}</td>
-        <td>{{ vehicle.registration_number }}</td>
-        <td>{{ vehicle.make }}</td>
-        <td>{{ vehicle.model }}</td>
-        <td>{{ vehicle.colour }}</td>
-        <td>{{ vehicle.fuel }}</td>
-        <td>{{ vehicle.mileage }}</td>
-        <td>
-            <a href="{{ url_for('update_vehicle', id=vehicle.id) }}" class="btn btn-primary">Edit</a>
-        </td>
-    </tr>
-    {% endfor %}
-</tbody>
+{% extends "base.html" %}
+
+{% block title %}Update Vehicle{% endblock %}
+
+{% block content %}
+<h1>Update Vehicle</h1>
+<form method="POST">
+    <label for="registration_number">Registration Number:</label>
+    <input type="text" id="registration_number" name="registration_number" value="{{ vehicle.registration_number }}" required><br>
+    <label for="make">Make:</label>
+    <input type="text" id="make" name="make" value="{{ vehicle.make }}" required><br>
+    <label for="model">Model:</label>
+    <input type="text" id="model" name="model" value="{{ vehicle.model }}" required><br>
+    <label for="colour">Colour:</label>
+    <input type="text" id="colour" name="colour" value="{{ vehicle.colour }}" required><br>
+    <label for="fuel">Fuel:</label>
+    <input type="text" id="fuel" name="fuel" value="{{ vehicle.fuel }}" required><br>
+    <label for="mileage">Mileage:</label>
+    <input type="text" id="mileage" name="mileage" value="{{ vehicle.mileage }}" required><br>
+    <button type="submit">Update Vehicle</button>
+</form>
+{% endblock %}

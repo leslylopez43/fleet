@@ -10,16 +10,7 @@
 <body>
     <header>
         <h1>Fleet Management System</h1>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('vehicles') }}">Vehicles</a></li>
-                <li><a href="{{ url_for('add_vehicle') }}">Add Vehicle</a></li>
-                <li><a href="{{ url_for('add_customer') }}">Add Customer</a></li>
-                <li><a href="{{ url_for('add_hire') }}">Add Hire</a></li>
-                <li><a href="{{ url_for('lessors_view') }}">Lessors</a></li>
-            </ul>
-        </nav>
+        
     </header>
     <main>
         {% block content %}{% endblock %}
