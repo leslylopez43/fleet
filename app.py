@@ -161,12 +161,37 @@ def update_vehicle(id):
     conn.close()
     return render_template('update_vehicle.html', vehicle=vehicle)
 
+@app.route('/customer', methods=['GET', 'POST'])
+def customer():
+    conn = sqlite3.connect('database.db')
+    cur = conn.cursor()
+    
+    if request.method == "POST":
+        search_term = request.form.get("search")
+        if search_term:
+            sql_select_query = """
+                SELECT * FROM customer WHERE name LIKE ? 
+                OR licence LIKE ? 
+                OR dob LIKE ?
+            """
+            cur.execute(sql_select_query, (f'%{search_term}%', f'%{search_term}%', f'%{search_term}%'))
+        else:
+            sql_select_query = "SELECT * FROM customer;"
+            cur.execute(sql_select_query)
+    else:
+        sql_select_query = "SELECT * FROM customer;"
+        cur.execute(sql_select_query)
+    
+    customer_details = cur.fetchall()
+    cur.close()
+    return render_template("customer.html", customer=customer_details)
+
 
 @app.route('/add_customer', methods=['GET', 'POST'])
 def add_customer():
     if request.method == 'POST':
         name = request.form['name']
-        license = request.form['license']
+        licence = request.form['licence']
         phone = request.form['phone']
         address = request.form['address']
         from_date = request.form['from_date']

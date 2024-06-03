@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}Update Vehicle{% endblock %}
+{% block title %}customer{% endblock %}
 
 {% block content %}
     <h1>Customer Data</h1>
-    <form action="{{ url_for('vehicles') }}" method="POST">
+    <form action="{{ url_for('customer') }}" method="POST">
         <label for="search">Search for Customer:</label>
         <input type="text" name="search" id="search">
         <button type="submit">Search</button>
@@ -22,7 +22,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for vehicle in vehicles %}
+            {% for customer in customer %}
             <tr>
                 <td>{{ customer[1] }}</td>
                 <td>{{ customer[2] }}</td>
