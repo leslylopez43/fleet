@@ -272,10 +272,6 @@ lessors = [
     (2, 'Company B', 'Address B', '5678'),
 ]
 
-
-
-
-
 @app.route('/lessor_data', methods=['GET', 'POST'])
 def lessor_data():
     if request.method == 'POST':
@@ -291,33 +287,55 @@ def lessor_data():
     return render_template('lessor_data.html', lessors=lessors)
 
 
-@app.route('/edit_lessor/<int:id>', methods=['GET', 'POST'])
-def edit_lessor(id):
-    # Handle editing an existing lessor (not implemented in this example)
-    return 'Edit Lessor Page'
-
-
-@app.route('/delete_lessor/<int:id>', methods=['POST'])
-def delete_lessor(id):
-    # Handle deleting an existing lessor (not implemented in this example)
-    return redirect(url_for('lessor_data'))  # Redirect to the lessor_data page after deleting
 
 
 
+@app.route('/lessor', methods=['GET', 'POST'])
+def lessor():
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
 
-@app.route('/lessors', methods=['GET', 'POST'])
-def lessors_view():
     if request.method == 'POST':
-        # Handle form submission to add a new lessor
-        company_name = request.form.get('company_name')
-        address = request.form.get('address')
-        agreement_number = request.form.get('agreement_number')
-        # Add the new lessor to the list (or save to database)
-        lessors.append((len(lessors) + 1, company_name, address, agreement_number))
-        return redirect(url_for('lessors_view'))  # Redirect to the lessors page after adding
+        search_query = request.form.get('search')
+        if search_query:
+            cursor.execute("SELECT * FROM lessor WHERE company_name LIKE ?", ('%' + search_query + '%',))
+        else:
+            company_name = request.form['company_name']
+            address = request.form['address']
+            agreement_number = request.form['agreement_number']
+            cursor.execute('''
+                INSERT INTO lessor (company_name, address, agreement_number)
+                VALUES (?, ?, ?)
+            ''', (company_name, address, agreement_number))
+            conn.commit()
 
-    # Render the lessors template with the lessors data
-    return render_template('lessor.html', lessor=lessors)
+    cursor.execute("SELECT * FROM lessor")
+    lessors_data = cursor.fetchall()
+    conn.close()
+    return render_template('lessor.html', lessors=lessors_data)
+
+@app.route('/update_lessor/<int:id>', methods=['GET', 'POST'])
+def update_lessor(id):
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+
+    if request.method == 'POST':
+        company_name = request.form['company_name']
+        address = request.form['address']
+        agreement_number = request.form['agreement_number']
+        cursor.execute('''
+            UPDATE lessor
+            SET company_name = ?, address = ?, agreement_number = ?
+            WHERE id = ?
+        ''', (company_name, address, agreement_number, id))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('lessor'))
+
+    cursor.execute("SELECT * FROM lessor WHERE id = ?", (id,))
+    lessor = cursor.fetchone()
+    conn.close()
+    return render_template('update_lessor.html', lessor=lessor)
 
 
 if __name__ == '__main__':

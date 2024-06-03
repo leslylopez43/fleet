@@ -1,26 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vehicle hire app</title>
-</head>
+{% extends "base.html" %}
+
+{% block content %}
 <body>
     <h1>Vehicle hire Management System</h1>
 
     <ul>
         <li><a href="/add_vehicle">Add vehicles</a></li>
         <li><a href="/add_customer">Add Customer</a></li>
-
         <li><a href="/add_hire">Add hire Agreement</a></li>
         <li><a href="/print_hire">Print Hire Agreement</a></li>
         <li><a href="/vehicle">vehicle</a></li>
-        <li><a href="lessor_data">Lessor</a></li>
-
-
-      
-        
+        <li><a href="lessor">Lessor</a></li>
     </ul>
-</body
-</html>
+</body>
+{% endblock %}
