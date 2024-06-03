@@ -2,49 +2,47 @@
 {% block title %}Lessor{% endblock %}
 
 {% block content %}
-<body>
-    <h1>Lessor Data</h1>
-    <form action="{{ url_for('lessor') }}" method="POST">
-        <label for="search">Search for Lessor:</label>
-        <input type="text" name="search" id="search">
-        <button type="submit">Search</button>
-    </form>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Company Name</th>
-                <th>Address</th>
-                <th>Agreement Number</th>
-                <th>Actions</th> <!-- Add a new table header for actions -->
-            </tr>
-        </thead>
-        <tbody>
-            {% for lessor in lessors %}
-            <tr>
-                <td>{{ lessor[0] }}</td>
-                <td>{{ lessor[1] }}</td>
-                <td>{{ lessor[2] }}</td>
-                <td>{{ lessor[3] }}</td>
-                <td>
-                    <a href="{{ url_for('update_lessor', id=lessor[0]) }}">Edit</a> <!-- Edit button -->
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <h2>Add a New Lessor</h2>
-    <form method="post" action="{{ url_for('lessor') }}">
-        <label for="company_name">Company Name:</label>
-        <input type="text" id="company_name" name="company_name" required><br><br>
+<h1>Lessor Data</h1>
+<form action="{{ url_for('lessor') }}" method="POST">
+    <label for="search">Search for Lessor:</label>
+    <input type="text" name="search" id="search">
+    <button type="submit">Search</button>
+</form>
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Company Name</th>
+            <th>Address</th>
+            <th>Agreement Number</th>
+            <th>Actions</th> <!-- Add a new table header for actions -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for lessor in lessors %}
+        <tr>
+            <td>{{ lessor[0] }}</td>
+            <td>{{ lessor[1] }}</td>
+            <td>{{ lessor[2] }}</td>
+            <td>{{ lessor[3] }}</td>
+            <td>
+                <a href="{{ url_for('update_lessor', id=lessor[0]) }}">Edit</a> <!-- Edit button -->
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<h2>Add a New Lessor</h2>
+<form method="post" action="{{ url_for('lessor') }}">
+    <label for="company_name">Company Name:</label>
+    <input type="text" id="company_name" name="company_name" required><br><br>
 
-        <label for="address">Address:</label>
-        <input type="text" id="address" name="address" required><br><br>
+    <label for="address">Address:</label>
+    <input type="text" id="address" name="address" required><br><br>
 
-        <label for="agreement_number">Agreement Number:</label>
-        <input type="text" id="agreement_number" name="agreement_number" required><br><br>
+    <label for="agreement_number">Agreement Number:</label>
+    <input type="text" id="agreement_number" name="agreement_number" required><br><br>
 
-        <input type="submit" value="Add Lessor">
-    </form>
-</body>
+    <input type="submit" value="Add Lessor">
+</form>
 {% endblock %}

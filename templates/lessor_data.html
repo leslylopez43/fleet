@@ -1,13 +1,9 @@
 {% extends "base.html" %}
-{% block title %}Lessor{% endblock %}
+
+{% block title %}Lessor_data{% endblock %}
 
 {% block content %}
-<h1>Lessor Data</h1>
-<form action="{{ url_for('lessor') }}" method="POST">
-    <label for="search">Search for Lessor:</label>
-    <input type="text" name="search" id="search">
-    <button type="submit">Search</button>
-</form>
+<h1>Lessors</h1>
 <table border="1">
     <thead>
         <tr>
@@ -15,7 +11,6 @@
             <th>Company Name</th>
             <th>Address</th>
             <th>Agreement Number</th>
-            <th>Actions</th> <!-- Add a new table header for actions -->
         </tr>
     </thead>
     <tbody>
@@ -25,15 +20,13 @@
             <td>{{ lessor[1] }}</td>
             <td>{{ lessor[2] }}</td>
             <td>{{ lessor[3] }}</td>
-            <td>
-                <a href="{{ url_for('update_lessor', id=lessor[0]) }}">Edit</a> <!-- Edit button -->
-            </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+
 <h2>Add a New Lessor</h2>
-<form method="post" action="{{ url_for('lessor') }}">
+<form method="post" action="{{ url_for('lessors_view') }}">
     <label for="company_name">Company Name:</label>
     <input type="text" id="company_name" name="company_name" required><br><br>
 

@@ -322,10 +322,7 @@ def lessor():
             ''', (company_name, address))
             conn.commit()
 
-    cursor.execute("SELECT * FROM lessor")
-    lessors_data = cursor.fetchall()
-    conn.close()
-    return render_template('lessor.html', lessors=lessors_data)
+   
 
 @app.route('/update_lessor/<int:id>', methods=['GET', 'POST'])
 def update_lessor(id):
