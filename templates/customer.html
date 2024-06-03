@@ -18,7 +18,8 @@
                 <th>ADDRESS</th>
                 <th>FROM</th>
                 <th>EXP:</th>
-                <th>DOB:</th> <!-- Add a new table header for actions -->
+                <th>DOB:</th>
+                <th>UPDATE:</th>  <!-- Add a new table header for actions -->
             </tr>
         </thead>
         <tbody>
@@ -30,8 +31,10 @@
                 <td>{{ customer[4] }}</td>
                 <td>{{ customer[5] }}</td>
                 <td>{{ customer[6] }}</td>
+                <td>{{ customer[7] }}</td>
                 <td>
                     <a href="{{ url_for('update_customer', id=customer[0]) }}">Edit</a> <!-- Edit button -->
+                    
                 </td>
             </tr>
             {% endfor %}

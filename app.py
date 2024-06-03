@@ -171,7 +171,7 @@ def customer():
         if search_term:
             sql_select_query = """
                 SELECT * FROM customer WHERE name LIKE ? 
-                OR licence LIKE ? 
+                OR license LIKE ? 
                 OR dob LIKE ?
             """
             cur.execute(sql_select_query, (f'%{search_term}%', f'%{search_term}%', f'%{search_term}%'))
@@ -301,7 +301,7 @@ def add_hire():
 
 @app.route('/print_hire/<int:hire_id>')
 def print_hire(hire_id):
-    conn = get_db()
+    conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
     cursor.execute('''
         SELECT h.*, v.registration_number, v.make, v.model, v.colour, v.fuel, 
@@ -315,37 +315,49 @@ def print_hire(hire_id):
     conn.close()
 
     if hire_details:
-        buffer = io.BytesIO()
-        c = canvas.Canvas(buffer, pagesize=letter)
-        width, height = letter
+        # Create a PDF buffer
+        buffer = BytesIO()
 
-        # Path to the background image
-        background_image_path = os.path.join(app.root_path, 'static', 'background_template.jpg')
+        # Create a PDF canvas
+        pdf = canvas.Canvas(buffer)
 
-        # Add background image
-        c.drawImage(background_image_path, 0, 0, width=width, height=height)
+        # Write content to PDF
+        pdf.drawString(100, 750, f"Registration Number: {hire_details[7]}")
+        pdf.drawString(100, 730, f"Customer Name: {hire_details[8]}")
+        pdf.drawString(100, 710, f"Start Date: {hire_details[3]}")
+        pdf.drawString(100, 690, f"End Date: {hire_details[4]}")
 
-        # Draw text on the canvas
-        y = height - 100
-        c.setFont("Helvetica", 12)
-        c.drawString(100, y, "Hire Agreement")
-        y -= 20
+        # Save PDF to buffer
+        pdf.save()
 
-        c.drawString(100, y, f"Registration Number: {hire_details[7]}")
-        y -= 15
-        c.drawString(100, y, f"Customer Name: {hire_details[8]}")
-        y -= 15
-        c.drawString(100, y, f"Start Date: {hire_details[3]}")
-        y -= 15
-        c.drawString(100, y, f"End Date: {hire_details[4]}")
-        y -= 30
-
-        c.save()
-
+        # Move buffer pointer to the beginning
         buffer.seek(0)
-        return send_file(buffer, as_attachment=True, download_name="hire_agreement.pdf", mimetype='application/pdf')
+
+        # Return PDF file as a response
+        return send_file(buffer, as_attachment=True, attachment_filename="hire_agreement.pdf")
+
     else:
-        return "No hire agreement found for the provided ID."
+        return "Hire details not found"
+@app.route('/print')
+def print_page():
+    # Fetch data or render the template as needed
+    data = {
+        'title': 'Printable Page',
+        'content': 'This is the content to be printed.'
+    }
+
+    # Render the HTML template with the data
+    rendered_html = render_template('printable_page.html', data=data)
+
+    # Convert the HTML to PDF using Flask-WeasyPrint
+    pdf = render_pdf(HTML(string=rendered_html))
+
+    # Create a response with the PDF content
+    response = make_response(pdf)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'inline; filename=printable_page.pdf'
+
+    return response
 
 
 
