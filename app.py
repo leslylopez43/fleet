@@ -26,7 +26,7 @@ def init_db():
             model TEXT,
             colour TEXT,
             fuel TEXT,
-            mileage INTEGER
+            mileage INTEGER,        
         )
     ''')
     cursor.execute('''
@@ -114,12 +114,39 @@ def add_vehicle():
         cursor = conn.cursor()
         cursor.execute('''
             INSERT INTO vehicle (registration_number, make, model, colour, fuel, mileage)
-            VALUES (?, ?, ?, ?, ?. ?)
+            VALUES (?, ?, ?, ?, ?, ?)
         ''', (registration_number, make, model, colour, fuel, mileage))
         conn.commit()
         conn.close()
         return redirect(url_for('index'))
     return render_template('add_vehicle.html')
+
+@app.route('/update_vehicle/<int:id>', methods=['GET', 'POST'])
+def update_vehicle(id):
+    if request.method == 'POST':
+        registration_number = request.form['registration_number']
+        make = request.form['make']
+        model = request.form['model']
+        colour = request.form['colour']
+        fuel = request.form['fuel']
+        mileage = request.form['mileage']
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+        cursor.execute('''
+            UPDATE vehicle
+            SET registration_number=?, make=?, model=?, colour=?, fuel=?, mileage=?
+            WHERE id=?
+        ''', (registration_number, make, model, colour, fuel, mileage, id))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('index'))
+    # Fetch vehicle data by id and pass it to the template for editing
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM vehicle WHERE id=?", (id,))
+    vehicle = cursor.fetchone()
+    conn.close()
+    return render_template('update_vehicle.html', vehicle=vehicle)
 
 
 @app.route('/add_customer', methods=['GET', 'POST'])

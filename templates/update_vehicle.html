@@ -1,0 +1,16 @@
+<tbody>
+    {% for vehicle in vehicles %}
+    <tr>
+        <td>{{ vehicle.id }}</td>
+        <td>{{ vehicle.registration_number }}</td>
+        <td>{{ vehicle.make }}</td>
+        <td>{{ vehicle.model }}</td>
+        <td>{{ vehicle.colour }}</td>
+        <td>{{ vehicle.fuel }}</td>
+        <td>{{ vehicle.mileage }}</td>
+        <td>
+            <a href="{{ url_for('update_vehicle', id=vehicle.id) }}" class="btn btn-primary">Edit</a>
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
