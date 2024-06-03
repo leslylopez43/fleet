@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Customer</title>
+    <base href="{{ request.scheme }}://{{ request.host }}{{ url_for('add_customer') }}/">
+</head>
+<body>
+    <h1>Add Customer</h1>
+    <form method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="license">License:</label>
+        <input type="text" id="license" name="license" required><br><br>
+
+        <label for="phone">Phone:</label>
+        <input type="text" id="phone" name="phone" required><br><br>
+
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address" required><br><br>
+
+        <label for="from_date">From Date:</label>
+        <input type="text" id="from_date" name="from_date" required><br><br>
+
+        <label for="exp_date">Expiration Date:</label>
+        <input type="text" id="exp_date" name="exp_date" required><br><br>
+
+        <label for="dob">Date of Birth:</label>
+        <input type="text" id="dob
