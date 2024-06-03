@@ -280,7 +280,7 @@ def print_hire(hire_id):
 
 
 # Dummy data for demonstration purposes
-lessors = [
+lessor = [
     (1, 'Company A', 'Address A', '1234'),
     (2, 'Company B', 'Address B', '5678'),
 ]
@@ -293,11 +293,11 @@ def lessor_data():
         address = request.form.get('address')
         agreement_number = request.form.get('agreement_number')
         # Add the new lessor to the list (or save to database)
-        lessors.append((len(lessors) + 1, company_name, address, agreement_number))
+        lessor.append((len(lessor) + 1, company_name, address, agreement_number))
         return redirect(url_for('lessor_data'))  # Redirect to the lessor_data page after adding
 
     # Render the lessor_data template with the lessors data
-    return render_template('lessor_data.html', lessors=lessors)
+    return render_template('lessor_data.html', lessor=lessor)
 
 
 
@@ -308,6 +308,17 @@ def lessor():
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
 
+    # Create the 'lessor' table if it doesn't exist
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS lessor (
+            id INTEGER PRIMARY KEY,
+            company_name TEXT NOT NULL,
+            address TEXT NOT NULL,
+            agreement_number TEXT
+        )
+    ''')
+    conn.commit()
+
     if request.method == 'POST':
         search_query = request.form.get('search')
         if search_query:
@@ -317,10 +328,17 @@ def lessor():
             address = request.form['address']
             agreement_number = request.form['agreement_number']
             cursor.execute('''
-                INSERT INTO lessor (company_name, address)
-                VALUES (?, ?,)
-            ''', (company_name, address))
+                INSERT INTO lessor (company_name, address, agreement_number)
+                VALUES (?, ?, ?)
+            ''', (company_name, address, agreement_number))
             conn.commit()
+
+    # Fetch all lessor data
+    cursor.execute("SELECT * FROM lessor")
+    lessors_data = cursor.fetchall()
+    conn.close()
+
+    return render_template('lessor.html', lessors=lessors_data)
 
    
 
