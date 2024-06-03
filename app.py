@@ -1,6 +1,4 @@
-
-
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, redirect, request, send_file
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 import sqlite3
@@ -66,7 +64,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/add_vehicles', methods=['GET', 'POST'])
-def add_vehicles():
+def add_vehicle():
     if request.method == 'POST':
         registration_number = request.form['registration_number']
         make = request.form['make']
