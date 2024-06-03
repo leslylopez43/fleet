@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, send_file
+from flask import Flask, render_template, request, redirect, url_for, send_file
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 import sqlite3
@@ -63,7 +63,37 @@ def init_db():
 def index():
     return render_template('index.html')
 
-@app.route('/add_vehicles', methods=['GET', 'POST'])
+
+@app.route("/vehicles", methods=["GET", "POST"])
+def vehicles():
+    conn = db_conn()
+    cur = conn.cursor()
+    if request.method == "POST":
+        search_term = request.form.get("search")
+        if search_term:
+            sql_select_query = """
+                SELECT * FROM vehicle 
+                WHERE registration_number = ? 
+                OR make = ? 
+                OR model = ?
+            """
+            cur.execute(sql_select_query, (search_term, search_term, search_term))
+        else:
+            sql_select_query = "SELECT * FROM vehicle;"
+            cur.execute(sql_select_query)
+    else:
+        sql_select_query = "SELECT * FROM vehicle;"
+        cur.execute(sql_select_query)
+    
+    vehicles_details = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return render_template("vehicles.html", list_of_vehicles=vehicles_details)
+
+
+@app.route('/add_vehicle', methods=['GET', 'POST'])
 def add_vehicle():
     if request.method == 'POST':
         registration_number = request.form['registration_number']
@@ -80,7 +110,7 @@ def add_vehicle():
         conn.commit()
         conn.close()
         return redirect(url_for('index'))
-    return render_template('add_vehicles.html')
+    return render_template('add_vehicle.html')
 
 
 @app.route('/add_customer', methods=['GET', 'POST'])

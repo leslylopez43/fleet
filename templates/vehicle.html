@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vehicles</title>
+</head>
+<body>
+    <h1>Vehicles</h1>
+    <form method="post">
+        <input type="text" name="search" placeholder="Search by Registration Number, Brand, or Model">
+        <button type="submit">Search</button>
+    </form>
+
+    <h2>Vehicle List</h2>
+    <ul>
+        {% for vehicle in list_of_vehicles %}
+            <li>{{ vehicle }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
