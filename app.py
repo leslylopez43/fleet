@@ -232,6 +232,33 @@ def print_hire(hire_id):
     else:
         return "No hire agreement found for the provided ID."
 
+# Define the route for adding vehicle collection
+@app.route('/add_vehicle_collection', methods=['GET', 'POST'])
+def add_vehicle_collection():
+    if request.method == 'POST':
+        registration_number = request.form['registration_number']
+        driver_name = request.form['driver_name']
+        collection_location = request.form['collection_location']
+        drop_place = request.form['drop_place']
+        date_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Automatic addition of date and time
+        
+        # Save the data to the database
+        conn = sqlite3.connect(DATABASE)
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO vehicle_collection (registration_number, driver_name, collection_location, drop_place, date_time)
+            VALUES (?, ?, ?, ?, ?)
+        ''', (registration_number, driver_name, collection_location, drop_place, date_time))
+        conn.commit()
+        conn.close()
+        
+        # You can also handle image uploads here
+        
+        return "Vehicle collection added successfully!"
+
+    return render_template('add_vehicle_collection.html')
+
+
 if __name__ == '__main__':
     init_db()
     app.run(debug=True)
