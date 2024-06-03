@@ -317,9 +317,9 @@ def lessor():
             address = request.form['address']
             agreement_number = request.form['agreement_number']
             cursor.execute('''
-                INSERT INTO lessor (company_name, address, agreement_number)
-                VALUES (?, ?, ?)
-            ''', (company_name, address, agreement_number))
+                INSERT INTO lessor (company_name, address)
+                VALUES (?, ?,)
+            ''', (company_name, address))
             conn.commit()
 
     cursor.execute("SELECT * FROM lessor")
@@ -335,12 +335,11 @@ def update_lessor(id):
     if request.method == 'POST':
         company_name = request.form['company_name']
         address = request.form['address']
-        agreement_number = request.form['agreement_number']
         cursor.execute('''
             UPDATE lessor
             SET company_name = ?, address = ?, agreement_number = ?
             WHERE id = ?
-        ''', (company_name, address, agreement_number, id))
+        ''', (company_name, address, id))
         conn.commit()
         conn.close()
         return redirect(url_for('lessor'))
