@@ -1,17 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Print Hire Agreements</title>
+    <title>Hire Agreement</title>
 </head>
 <body>
-    <h1>Print Hire Agreements</h1>
-    <form method="POST">
-        <label for="start_date">Start Date:</label>
-        <input type="date" id="start_date" name="start_date" required>
-        <label for="end_date">End Date:</label>
-        <input type="date" id="end_date" name="end_date" required>
-        <button type="submit">Print</button>
-    </form>
-    <a href="/">Back to Home</a>
+    <h1>Hire Agreement</h1>
+    <p>Agreement Number: {{ hire_details[0] }}</p>
+    
+    <h2>Customer Details</h2>
+    <p>Name: {{ hire_details[15] }}</p>
+    <p>License: {{ hire_details[16] }}</p>
+    <p>Phone: {{ hire_details[17] }}</p>
+    <p>Address: {{ hire_details[18] }}</p>
+    <p>From: {{ hire_details[19] }}</p>
+    <p>Exp: {{ hire_details[20] }}</p>
+    <p>DOB: {{ hire_details[21] }}</p>
+    
+    <h2>Vehicle Details</h2>
+    <p>Registration: {{ hire_details[6] }}</p>
+    <p>Make: {{ hire_details[7] }}</p>
+    <p>Model: {{ hire_details[8] }}</p>
+    <p>Colour: {{ hire_details[9] }}</p>
+    <p>Fuel: {{ hire_details[10] }}</p>
+    
+    <h2>Out (Agreement Starts)</h2>
+    <p>Date: {{ hire_details[3] }}</p>
+    <p>Mileage: {{ hire_details[4] }}</p>
+    <p>Location: {{ hire_details[5] }}</p>
+    <p>Time: {{ hire_details[6] }}</p>
+    <p>Fuel Reading: {{ hire_details[7] }}</p>
+    
+    <h2>In (Agreement Ends)</h2>
+    <p>Due Date: {{ hire_details[8] }}</p>
+    <p>Time: {{ hire_details[9] }}</p>
+    <p>AdBlue: {{ hire_details[10] }}</p>
+    <p>Mileage: {{ hire_details[11] }}</p>
+    <p>Fuel Reading: {{ hire_details[12] }}</p>
+    <p>Extension to: {{ hire_details[13] }}</p>
+    <p>Hirer Signature: {{ hire_details[14] }}</p>
+    <p>On behalf of: {{ hire_details[15] }}</p>
+    
+    <button onclick="window.print()">Print Agreement</button>
 </body>
 </html>
