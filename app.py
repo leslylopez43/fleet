@@ -70,7 +70,7 @@ def index():
 
 
 @app.route("/vehicle", methods=["GET", "POST"])
-def vehicle():
+def vehicles():
     conn = sqlite3.connect('database.db')
     cur = conn.cursor()
     
@@ -94,8 +94,8 @@ def vehicle():
     vehicles_details = cur.fetchall()
     cur.close()
 
-    return render_template("vehicle.html", list_of_vehicles=vehicles_details)
-
+ 
+    return render_template("vehicle.html", vehicles=vehicles_details)
 
 @app.route('/add_vehicle', methods=['GET', 'POST'])
 def add_vehicle():
@@ -183,7 +183,6 @@ def add_hire():
     
     return render_template('add_hire.html', vehicles=vehicles, customers=customers)
    
-
 
 @app.route('/print_hire/<int:hire_id>')
 def print_hire(hire_id):
