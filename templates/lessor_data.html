@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Lessors{% endblock %}
+
+{% block content %}
+<h1>Lessors</h1>
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Company Name</th>
+            <th>Address</th>
+            <th>Agreement Number</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for lessor in lessors %}
+        <tr>
+            <td>{{ lessor[0] }}</td>
+            <td>{{ lessor[1] }}</td>
+            <td>{{ lessor[2] }}</td>
+            <td>{{ lessor[3] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Add a New Lessor</h2>
+<!-- <form method="post">
+    <label for="company_name">Company Name:</label>
+    <input type="text" id="company_name" name="company_name" required><br><br>
+
+    <label for="address">Address:</label>
+    <input type="text" id="address" name="address" required><br><br>
+
+    <label for="agreement_number">Agreement Number:</label>
+    <input type="text" id="agreement_number" name="agreement_number" required><br><br>
+
+    <input type="submit" value="Add Lessor">
+</form> -->
+<form method="post" action="{{ url_for('lessors_view') }}">
+    <label for="company_name">Company Name:</label>
+    <input type="text" id="company_name" name="company_name" required><br><br>
+
+    <label for="address">Address:</label>
+    <input type="text" id="address" name="address" required><br><br>
+
+    <label for="agreement_number">Agreement Number:</label>
+    <input type="text" id="agreement_number" name="agreement_number" required><br><br>
+
+    <input type="submit" value="Add Lessor">
+</form>
+{% endblock %}

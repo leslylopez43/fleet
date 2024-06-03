@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, send_file
+
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 import sqlite3
@@ -232,33 +233,58 @@ def print_hire(hire_id):
     else:
         return "No hire agreement found for the provided ID."
 
-# Define the route for adding vehicle collection
-@app.route('/add_vehicle_collection', methods=['GET', 'POST'])
-def add_vehicle_collection():
-    if request.method == 'POST':
-        registration_number = request.form['registration_number']
-        driver_name = request.form['driver_name']
-        collection_location = request.form['collection_location']
-        drop_place = request.form['drop_place']
-        date_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Automatic addition of date and time
-        
-        # Save the data to the database
-        conn = sqlite3.connect(DATABASE)
-        cursor = conn.cursor()
-        cursor.execute('''
-            INSERT INTO vehicle_collection (registration_number, driver_name, collection_location, drop_place, date_time)
-            VALUES (?, ?, ?, ?, ?)
-        ''', (registration_number, driver_name, collection_location, drop_place, date_time))
-        conn.commit()
-        conn.close()
-        
-        # You can also handle image uploads here
-        
-        return "Vehicle collection added successfully!"
 
-    return render_template('add_vehicle_collection.html')
+
+
+
+# Dummy data for demonstration purposes
+# Dummy data for demonstration purposes
+lessors = [
+    (1, 'Company A', 'Address A', '1234'),
+    (2, 'Company B', 'Address B', '5678'),
+]
+
+@app.route('/lessor_data', methods=['GET', 'POST'])
+def lessor_data():
+    if request.method == 'POST':
+        # Handle form submission to add a new lessor
+        company_name = request.form.get('company_name')
+        address = request.form.get('address')
+        agreement_number = request.form.get('agreement_number')
+        # Add the new lessor to the list (or save to database)
+        lessors.append((len(lessors) + 1, company_name, address, agreement_number))
+        return redirect(url_for('lessor_data'))  # Redirect to the lessor_data page after adding
+
+    # Render the lessor_data template with the lessors data
+    return render_template('lessor_data.html', lessors=lessors)
+
+
+@app.route('/edit_lessor/<int:id>', methods=['GET', 'POST'])
+def edit_lessor(id):
+    # Handle editing an existing lessor (not implemented in this example)
+    return 'Edit Lessor Page'
+
+
+@app.route('/delete_lessor/<int:id>', methods=['POST'])
+def delete_lessor(id):
+    # Handle deleting an existing lessor (not implemented in this example)
+    return redirect(url_for('lessor_data'))  # Redirect to the lessor_data page after deleting
+
+
+@app.route('/lessors_view', methods=['GET', 'POST'])
+def lessors_view():
+    if request.method == 'POST':
+        # Handle form submission to add a new lessor
+        company_name = request.form.get('company_name')
+        address = request.form.get('address')
+        agreement_number = request.form.get('agreement_number')
+        # Add the new lessor to the list (or save to database)
+        lessors.append((len(lessors) + 1, company_name, address, agreement_number))
+        return redirect(url_for('lessors_view'))  # Redirect to the lessors_view page after adding
+
+    # Render the lessors template with the lessors data
+    return render_template('lessor.html', lessors=lessors)
 
 
 if __name__ == '__main__':
-    init_db()
     app.run(debug=True)

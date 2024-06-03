@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Fleet Management{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Fleet Management System</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('vehicles') }}">Vehicles</a></li>
+                <li><a href="{{ url_for('add_vehicle') }}">Add Vehicle</a></li>
+                <li><a href="{{ url_for('add_customer') }}">Add Customer</a></li>
+                <li><a href="{{ url_for('add_hire') }}">Add Hire</a></li>
+                <li><a href="{{ url_for('lessors') }}">Lessors</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <p>&copy; 2024 Fleet Management System</p>
+    </footer>
+</body>
+</html>
