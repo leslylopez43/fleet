@@ -1,51 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Vehicles</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Data</title>
 </head>
 <body>
-    <h1>Vehicles</h1>
-    <div class="container">
-        <h1 class="text-center mb-4 row justify-content-center">Vehicle DATA</h1>
-        <form action="{{ url_for('vehicles') }}" method="POST">
-            <div class="form-group">
-                <label for="search">Search for Vehicle</label>
-                <input type="text" name="search" id="search" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-primary btn-primary-custom">Search</button>
-        </form>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Vehicle ID</th>
-                    <th>Registration Number</th>
-                    <th>Make</th>
-                    <th>Model</th>
-                    <th>Colour</th>
-                    <th>Fuel</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for column in list_of_vehicles %}
-                <tr>
-                    <td>{{ column.id }}</td>
-                    <td>{{ column.registration_number }}</td>
-                    <td>{{ column.make }}</td>
-                    <td>{{ column.model }}</td>
-                    <td>{{ column.colour }}</td>
-                    <td>{{ column.fuel }}</td>
-                    <td>
-                        <a href="{{ url_for('update_vehicle', vehicle_id=column.id) }}" class="btn btn-primary btn-primary-custom">Update</a>
-                        <a href="{{ url_for('delete_vehicle', vehicle_id=column.id) }}" class="btn btn-primary btn-primary-custom">Delete</a>
-                        <a href="{{ url_for('print_vehicle', vehicle_id=column.id) }}" class="btn btn-primary btn-primary-custom">Print</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <a href="{{ url_for('add_vehicle') }}" class="btn btn-primary btn-primary-custom">Add New Vehicle</a>
-        <a href="{{ url_for('index') }}" class="btn btn-primary btn-primary-custom">Go to Menu</a>
-    </div>
+    <h1>Vehicle Data</h1>
+    <form action="{{ url_for('vehicles') }}" method="POST">
+        <label for="search">Search for Vehicle:</label>
+        <input type="text" name="search" id="search">
+        <button type="submit">Search</button>
+    </form>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Registration Number</th>
+                <th>Make</th>
+                <th>Model</th>
+                <th>Colour</th>
+                <th>Fuel</th>
+                <th>Mileage</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for vehicle in vehicles %}
+            <tr>
+                <td>{{ vehicle[1] }}</td>
+                <td>{{ vehicle[2] }}</td>
+                <td>{{ vehicle[3] }}</td>
+                <td>{{ vehicle[4] }}</td>
+                <td>{{ vehicle[5] }}</td>
+                <td>{{ vehicle[6] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>

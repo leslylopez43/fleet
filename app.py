@@ -25,7 +25,8 @@ def init_db():
             make TEXT,
             model TEXT,
             colour TEXT,
-            fuel TEXT
+            fuel TEXT,
+            mileage INTEGER
         )
     ''')
     cursor.execute('''
@@ -98,6 +99,8 @@ def vehicles():
  
     return render_template("vehicle.html", vehicles=vehicles_details)
 
+
+
 @app.route('/add_vehicle', methods=['GET', 'POST'])
 def add_vehicle():
     if request.method == 'POST':
@@ -106,12 +109,13 @@ def add_vehicle():
         model = request.form['model']
         colour = request.form['colour']
         fuel = request.form['fuel']
+        mileage = request.form['mileage']
         conn = sqlite3.connect('database.db')
         cursor = conn.cursor()
         cursor.execute('''
-            INSERT INTO vehicle (registration_number, make, model, colour, fuel)
-            VALUES (?, ?, ?, ?, ?)
-        ''', (registration_number, make, model, colour, fuel))
+            INSERT INTO vehicle (registration_number, make, model, colour, fuel, mileage)
+            VALUES (?, ?, ?, ?, ?. ?)
+        ''', (registration_number, make, model, colour, fuel, mileage))
         conn.commit()
         conn.close()
         return redirect(url_for('index'))
@@ -235,14 +239,15 @@ def print_hire(hire_id):
 
 
 
-
-
-# Dummy data for demonstration purposes
 # Dummy data for demonstration purposes
 lessors = [
     (1, 'Company A', 'Address A', '1234'),
     (2, 'Company B', 'Address B', '5678'),
 ]
+
+
+
+
 
 @app.route('/lessor_data', methods=['GET', 'POST'])
 def lessor_data():
@@ -271,7 +276,9 @@ def delete_lessor(id):
     return redirect(url_for('lessor_data'))  # Redirect to the lessor_data page after deleting
 
 
-@app.route('/lessors_view', methods=['GET', 'POST'])
+
+
+@app.route('/lessors', methods=['GET', 'POST'])
 def lessors_view():
     if request.method == 'POST':
         # Handle form submission to add a new lessor
@@ -280,10 +287,10 @@ def lessors_view():
         agreement_number = request.form.get('agreement_number')
         # Add the new lessor to the list (or save to database)
         lessors.append((len(lessors) + 1, company_name, address, agreement_number))
-        return redirect(url_for('lessors_view'))  # Redirect to the lessors_view page after adding
+        return redirect(url_for('lessors_view'))  # Redirect to the lessors page after adding
 
     # Render the lessors template with the lessors data
-    return render_template('lessor.html', lessors=lessors)
+    return render_template('lessor.html', lessor=lessors)
 
 
 if __name__ == '__main__':
