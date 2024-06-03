@@ -183,8 +183,14 @@ def add_customer():
         return redirect(url_for('index'))
     return render_template('add_customer.html')
 
+   
+           
+ 
+
 @app.route('/update_customer/<int:id>', methods=['GET', 'POST'])
 def update_customer(id):
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
     if request.method == 'POST':
         name = request.form['name']
         license = request.form['license']
@@ -193,9 +199,6 @@ def update_customer(id):
         from_date = request.form['from_date']
         exp_date = request.form['exp_date']
         dob = request.form['dob']
-        
-        conn = sqlite3.connect('database.db')
-        cursor = conn.cursor()
         cursor.execute('''
             UPDATE customer
             SET name=?, license=?, phone=?, address=?, from_date=?, exp_date=?, dob=?
@@ -204,20 +207,15 @@ def update_customer(id):
         conn.commit()
         conn.close()
         
-        return redirect(url_for('index'))  # Redirect to the index or any other desired route after updating
+        return redirect(url_for('customer'))  # Redirect to the index or any other desired route after updating
     
     # Fetch the existing customer data to pre-fill the form
-    conn = sqlite3.connect('database.db')
-    cursor = conn.cursor()
     cursor.execute('SELECT * FROM customer WHERE id=?', (id,))
     customer = cursor.fetchone()
     conn.close()
-    
-    if not customer:
-        # Handle the case where the customer with the given ID doesn't exist
-        return "Customer not found", 404
-    
+
     return render_template('update_customer.html', customer=customer)
+
 
 @app.route('/search_customer', methods=['POST'])
 def search_customer():
