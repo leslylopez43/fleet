@@ -3,6 +3,13 @@
 {% block title %}Update Customer{% endblock %}
 
 {% block content %}
+<form action="/search" method="POST">
+    <!-- Your form fields here -->
+    <input type="text" name="name" placeholder="Name">
+    <input type="text" name="vehicle_details" placeholder="Vehicle Details">
+    <input type="text" name="date_of_hire" placeholder="Date of Hire (YYYY-MM-DD)">
+    <button type="submit">Search</button>
+</form>
 
 <h2 class="mt-4">Customer List</h2>
 <ul class="list-group">

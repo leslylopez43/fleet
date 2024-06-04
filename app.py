@@ -412,11 +412,15 @@ def update_lessor(id):
     return render_template('update_lessor.html', lessor=lessor)
 
 
-
+# Function to get database connection
 def get_db_connection():
-    conn = sqlite3.connect('database.db')
+    conn = sqlite3.connect('your_database.db')
     conn.row_factory = sqlite3.Row
     return conn
+
+@app.route('/search', methods=['GET'])
+def search_form():
+    return render_template('search.html')
 
 @app.route('/search', methods=['POST'])
 def search():
@@ -442,18 +446,15 @@ def search():
             pass
 
     conn = get_db_connection()
-    cursor = conn.execute(query, params)
-    customers = cursor.fetchall()
+    cur = conn.execute(query, params)
+    customer = cur.fetchall()
     conn.close()
 
-    return render_template('index.html', customers=customers)
-
-if __name__ == "__main__":
-    app.run(debug=True)
+    return render_template('search.html', customer=customer)
 
 @app.route('/print/<int:id>', methods=['GET'])
 def print_customer(id):
-    customer = Customer.query.get_or_404(id)
+    customer = customer.query.get_or_404(id)
     return render_template('print.html', customer=customer)
 
 if __name__ == '__main__':
