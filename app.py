@@ -33,6 +33,27 @@ for table in tables:
 cursor.close()
 conn.close()
 
+conn = sqlite3.connect('database.db')
+
+# Create a cursor object to execute SQL queries
+cursor = conn.cursor()
+
+# Define the SQL statement to create a new table
+create_table_query = '''
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY,
+    username TEXT NOT NULL,
+    email TEXT NOT NULL,
+    age INTEGER
+)
+'''
+
+# Execute the SQL query to create the table
+cursor.execute(create_table_query)
+
+# Commit the transaction to save the changes
+conn.commit()
+
 def get_db():
     conn=sqlite3.connect(DATABASE)
     conn.row_factory = sqlite3.Row
@@ -65,7 +86,7 @@ def init_db():
         )
     ''')
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS agreement (
+        CREATE TABLE IF NOT EXISTS hire (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             agreement_number TEXT UNIQUE,  -- Make agreement_number unique
             registration_number TEXT NOT NULL,
@@ -280,7 +301,7 @@ def search_customer():
 
 
 
-@app.route("/agreement", methods=["GET", "POST"])
+@app.route("/hire", methods=["GET", "POST"])
 def hire():
     try:
         # Connect to the SQLite database
@@ -349,7 +370,7 @@ def add_hire():
         try:
             # Execute SQL query to insert the new hire entry
             cursor.execute('''
-                INSERT INTO agreement (
+                INSERT INTO hire (
                     agreement_number, registration_number, name, out_date, out_mileage, out_location,
                     out_time, out_fuel_reading, in_due_date, in_time, in_adblue, in_mileage,
                     in_fuel_reading, extension_to, hirer_signature, on_behalf_of
