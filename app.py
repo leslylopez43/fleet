@@ -85,7 +85,7 @@ def init_db():
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS ehicle (
+        CREATE TABLE IF NOT EXISTS vehicle (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             registration_number TEXT NOT NULL,
             make TEXT,
@@ -96,7 +96,7 @@ def init_db():
         )
     ''')
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS ustomer (
+        CREATE TABLE IF NOT EXISTS customer (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             license TEXT,
