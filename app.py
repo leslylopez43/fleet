@@ -13,6 +13,26 @@ import uuid
 app = Flask(__name__)
 DATABASE = 'database.db'
 
+# Connect to the SQLite database
+conn = sqlite3.connect('database.db')
+
+# Create a cursor object to execute SQL commands
+cursor = conn.cursor()
+
+# Execute the SQL query
+cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+
+# Fetch all rows from the result set
+tables = cursor.fetchall()
+
+# Print the table names
+for table in tables:
+    print(table[0])
+
+# Close the cursor and database connection
+cursor.close()
+conn.close()
+
 def get_db():
     conn=sqlite3.connect(DATABASE)
     conn.row_factory = sqlite3.Row
@@ -45,11 +65,11 @@ def init_db():
         )
     ''')
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS hire_new (
+        CREATE TABLE IF NOT EXISTS hirer (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             agreement_number TEXT UNIQUE,  -- Make agreement_number unique
-            registration_number INTEGER NOT NULL,
-            name INTEGER NOT NULL,
+            registration_number TEXT NOT NULL,
+            name TEXT NOT NULL,
             out_date TEXT,
             out_mileage TEXT,
             out_location TEXT,
