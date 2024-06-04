@@ -33,6 +33,48 @@ for table in tables:
 cursor.close()
 conn.close()
 
+
+import sqlite3
+
+# Connect to the SQLite database (or create it if it doesn't exist)
+conn = sqlite3.connect('example.db')
+
+# Create a cursor object to execute SQL queries
+cursor = conn.cursor()
+
+# Define the SQL statement to create a new table
+create_table_query = '''
+CREATE TABLE IF NOT EXISTS page (
+     id INTEGER PRIMARY KEY,
+    registration_number TEXT,
+    name TEXT,
+    out_date TEXT,
+    out_mileage TEXT,
+    out_location TEXT,
+    out_time TEXT,
+    out_fuel_reading TEXT,
+    in_due_date TEXT,
+    in_time TEXT,
+    in_adblue TEXT,
+    in_mileage TEXT,
+    in_fuel_reading TEXT,
+    extension_to TEXT,
+    hirer_signature TEXT,
+    on_behalf_of TEXT
+)
+'''
+
+# Execute the SQL query to create the table
+cursor.execute(create_table_query)
+
+# Commit the transaction to save the changes
+conn.commit()
+
+# Close the connection to the database
+conn.close()
+
+
+
 conn = sqlite3.connect('database.db')
 
 # Create a cursor object to execute SQL queries
@@ -42,9 +84,21 @@ cursor = conn.cursor()
 create_table_query = '''
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY,
-    username TEXT NOT NULL,
-    email TEXT NOT NULL,
-    age INTEGER
+    registration_number TEXT,
+    name TEXT,
+    out_date DATE,
+    out_mileage INTEGER,
+    out_location TEXT,
+    out_time TEXT,
+    out_fuel_reading INTEGER,
+    in_due_date DATE,
+    in_time TEXT,
+    in_adblue TEXT,
+    in_mileage INTEGER,
+    in_fuel_reading INTEGER,
+    extension_to TEXT,
+    hirer_signature TEXT,
+    on_behalf_of TEXT
 )
 '''
 
