@@ -6,6 +6,7 @@ from io import BytesIO
 from datetime import datetime
 import sqlite3
 import os
+import uuid
 
 
 
@@ -46,6 +47,8 @@ def init_db():
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS hire (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            agreement_number TEXT UNIQUE,  -- Make agreement_number unique
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             vehicle_id INTEGER NOT NULL,
             customer_id INTEGER NOT NULL,
             out_date TEXT,
@@ -67,6 +70,8 @@ def init_db():
     ''')
     conn.commit()
     conn.close()
+
+
 
 def create_tables():
     conn = sqlite3.connect('database.db')
@@ -266,6 +271,7 @@ def add_hire():
     customers = cursor.fetchall()
     
     if request.method == 'POST':
+        agreement_number = request.form['agreement_number']
         vehicle_id = request.form['vehicle_id']
         customer_id = request.form['customer_id']
         out_date = request.form['out_date']
@@ -287,12 +293,12 @@ def add_hire():
             INSERT INTO hire (
                 vehicle_id, customer_id, out_date, out_mileage, out_location, out_time,
                 out_fuel_reading, in_due_date, in_time, in_adblue, in_mileage, in_fuel_reading,
-                extension_to, hirer_signature, on_behalf_of, agreement_number
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                extension_to, hirer_signature, on_behalf_of
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
         ''', (
-            vehicle_id, customer_id, out_date, out_mileage, out_location, out_time,
+            agreement_number, vehicle_id, customer_id, out_date, out_mileage, out_location, out_time,
             out_fuel_reading, in_due_date, in_time, in_adblue, in_mileage, in_fuel_reading,
-            extension_to, hirer_signature, on_behalf_of, agreement_number
+            extension_to, hirer_signature, on_behalf_of
         ))
         conn.commit()
         
@@ -427,7 +433,7 @@ def search_form():
 @app.route('/search', methods=['POST'])
 def search():
     name = request.form.get('name', '').strip()
-    vehicle_details = request.form.get('vehicle_details', '').strip()
+    vehicle_details = request.form.get('registration_number', '').strip()
     date_of_hire = request.form.get('date_of_hire', '').strip()
 
     query = "SELECT * FROM customer WHERE 1=1"
@@ -436,9 +442,12 @@ def search():
     if name:
         query += " AND name LIKE ?"
         params.append(f"%{name}%")
+
+    query = "SELECT * FROM vehicle WHERE 1=1"
+    params = []
     if vehicle_details:
         query += " AND vehicle_details LIKE ?"
-        params.append(f"%{vehicle_details}%")
+        params.append(f"%{registration_number}%")
     if date_of_hire:
         try:
             date = datetime.strptime(date_of_hire, '%Y-%m-%d')
@@ -452,7 +461,7 @@ def search():
     customer = cur.fetchall()
     conn.close()
 
-    return render_template('search.html', customer=customer)
+    return render_template('result.html', customers=customer)
 
 @app.route('/print/<int:id>', methods=['GET'])
 def print_customer(id):

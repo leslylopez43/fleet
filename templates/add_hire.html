@@ -4,8 +4,12 @@
     <title>Add Hire</title>
 </head>
 <body>
+    
+    
+    
     <h1>Add Hire</h1>
-    <form method="POST">
+    <input type="text" name="agreement_number" placeholder="Agreement Number" required>
+    <form method="POST" action="/add_hire">
         <label for="vehicle_id">Vehicle:</label>
         <select id="vehicle_id" name="vehicle_id">
             {% for vehicle in vehicles %}
@@ -13,12 +17,14 @@
             {% endfor %}
         </select><br>
         <label for="customer_id">Customer:</label>
+        
         <select id="customer_id" name="customer_id">
             {% for customer in customers %}
             <option value="{{ customer[0] }}">{{ customer[1] }}</option>
             {% endfor %}
         </select><br>
         
+
         <h2>Out (Agreement Starts)</h2>
         <label for="out_date">Date:</label>
         <input type="date" id="out_date" name="out_date" required><br>
