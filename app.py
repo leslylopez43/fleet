@@ -280,7 +280,7 @@ def search_customer():
 
 
 
-@app.route("/hire", methods=["GET", "POST"])
+@app.route("/agreement", methods=["GET", "POST"])
 def hire():
     try:
         # Connect to the SQLite database
@@ -349,7 +349,7 @@ def add_hire():
         try:
             # Execute SQL query to insert the new hire entry
             cursor.execute('''
-                INSERT INTO hire (
+                INSERT INTO agreement (
                     agreement_number, registration_number, name, out_date, out_mileage, out_location,
                     out_time, out_fuel_reading, in_due_date, in_time, in_adblue, in_mileage,
                     in_fuel_reading, extension_to, hirer_signature, on_behalf_of
