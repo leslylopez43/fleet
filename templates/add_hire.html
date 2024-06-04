@@ -1,62 +1,59 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Add Hire</title>
-</head>
-<body>
-    
-    
-    
-    <h1>Add Hire</h1>
-    <input type="text" name="agreement_number" placeholder="Agreement Number" required>
-    <form method="POST" action="/add_hire">
-        <label for="vehicle_id">Vehicle:</label>
-        <select id="vehicle_id" name="vehicle_id">
-            {% for vehicle in vehicles %}
-            <option value="{{ vehicle[0] }}">{{ vehicle[1] }}</option>
-            {% endfor %}
-        </select><br>
-        <label for="customer_id">Customer:</label>
-        
-        <select id="customer_id" name="customer_id">
-            {% for customer in customers %}
-            <option value="{{ customer[0] }}">{{ customer[1] }}</option>
-            {% endfor %}
-        </select><br>
-        
+{% extends "base.html" %}
 
-        <h2>Out (Agreement Starts)</h2>
-        <label for="out_date">Date:</label>
-        <input type="date" id="out_date" name="out_date" required><br>
-        <label for="out_mileage">Mileage:</label>
-        <input type="text" id="out_mileage" name="out_mileage" required><br>
-        <label for="out_location">Location:</label>
-        <input type="text" id="out_location" name="out_location" required><br>
-        <label for="out_time">Time:</label>
-        <input type="text" id="out_time" name="out_time" required><br>
-        <label for="out_fuel_reading">Fuel Reading:</label>
-        <input type="text" id="out_fuel_reading" name="out_fuel_reading" required><br>
-        
-        <h2>In (Agreement Ends)</h2>
-        <label for="in_due_date">Due Date:</label>
-        <input type="date" id="in_due_date" name="in_due_date" required><br>
-        <label for="in_time">Time:</label>
-        <input type="text" id="in_time" name="in_time" required><br>
-        <label for="in_adblue">AdBlue:</label>
-        <input type="text" id="in_adblue" name="in_adblue" required><br>
-        <label for="in_mileage">Mileage:</label>
-        <input type="text" id="in_mileage" name="in_mileage" required><br>
-        <label for="in_fuel_reading">Fuel Reading:</label>
-        <input type="text" id="in_fuel_reading" name="in_fuel_reading" required><br>
-        <label for="extension_to">Extension to:</label>
-        <input type="text" id="extension_to" name="extension_to" required><br>
-        <label for="hirer_signature">Hirer Signature:</label>
-        <input type="text" id="hirer_signature" name="hirer_signature" required><br>
-        <label for="on_behalf_of">On behalf of:</label>
-        <input type="text" id="on_behalf_of" name="on_behalf_of" required><br>
-        
-        <button type="submit">Add Hire</button>
-    </form>
-    <a href="/">Back to Home</a>
-</body>
-</html>
+{% block title %}Add Hire{% endblock %}
+
+{% block content %}
+<form method="POST" action="{{ url_for('add_hire') }}">
+
+    <input type="text" name="agreement_number" placeholder="Agreement Number" required><br>
+
+    <label for="vehicle_id">Vehicle:</label>
+    <select id="vehicle_id" name="vehicle_id">
+        <option value="">Select Vehicle</option>
+        {% for vehicle in vehicles %}
+        <option value="{{ vehicle.id }}">{{ vehicle.registration_number }}</option>
+        {% endfor %}
+    </select>
+
+    <input type="text" id="vehicle_registration_number" name="vehicle_registration_number" style="display: none;" placeholder="Enter Registration Number" required><br>
+
+    <label for="customer_id">Customer:</label>
+    <select id="customer_id" name="customer_id">
+        {% for customer in customers %}
+        <option value="{{ customer['id'] }}">{{ customer['name'] }}</option>
+        {% endfor %}
+    </select><br>
+
+    <h2>Out (Agreement Starts)</h2>
+    <label for="out_date">Date:</label>
+    <input type="date" id="out_date" name="out_date" required><br>
+    <label for="out_mileage">Mileage:</label>
+    <input type="text" id="out_mileage" name="out_mileage" required><br>
+    <label for="out_location">Location:</label>
+    <input type="text" id="out_location" name="out_location" required><br>
+    <label for="out_time">Time:</label>
+    <input type="text" id="out_time" name="out_time" required><br>
+    <label for="out_fuel_reading">Fuel Reading:</label>
+    <input type="text" id="out_fuel_reading" name="out_fuel_reading" required><br>
+
+    <h2>In (Agreement Ends)</h2>
+    <label for="in_due_date">Due Date:</label>
+    <input type="date" id="in_due_date" name="in_due_date" required><br>
+    <label for="in_time">Time:</label>
+    <input type="text" id="in_time" name="in_time" required><br>
+    <label for="in_adblue">AdBlue:</label>
+    <input type="text" id="in_adblue" name="in_adblue" required><br>
+    <label for="in_mileage">Mileage:</label>
+    <input type="text" id="in_mileage" name="in_mileage" required><br>
+    <label for="in_fuel_reading">Fuel Reading:</label>
+    <input type="text" id="in_fuel_reading" name="in_fuel_reading" required><br>
+    <label for="extension_to">Extension to:</label>
+    <input type="text" id="extension_to" name="extension_to" required><br>
+    <label for="hirer_signature">Hirer Signature:</label>
+    <input type="text" id="hirer_signature" name="hirer_signature" required><br>
+    <label for="on_behalf_of">On behalf of:</label>
+    <input type="text" id="on_behalf_of" name="on_behalf_of" required><br>
+
+    <button type="submit">Add Hire</button>
+</form>
+{% endblock %}

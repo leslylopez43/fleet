@@ -48,7 +48,6 @@ def init_db():
         CREATE TABLE IF NOT EXISTS hire (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             agreement_number TEXT UNIQUE,  -- Make agreement_number unique
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
             vehicle_id INTEGER NOT NULL,
             customer_id INTEGER NOT NULL,
             out_date TEXT,
@@ -72,7 +71,8 @@ def init_db():
     conn.close()
 
 
-
+conn = sqlite3.connect('your_database.db')
+cursor = conn.cursor()
 def create_tables():
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
@@ -261,54 +261,107 @@ def search_customer():
     
     return render_template('search_results.html', customers=customers)
 
+
+
+@app.route("/hire", methods=["GET", "POST"])
+def hire():
+    try:
+        # Connect to the SQLite database
+        conn = sqlite3.connect('database.db')
+        cur = conn.cursor()
+
+        if request.method == "POST":
+            search_term = request.form.get("search")
+            if search_term:
+                sql_select_query = """
+                    SELECT * FROM hire 
+                    WHERE agreement_number LIKE ? 
+                    OR out_date LIKE ? 
+                    OR in_due_date LIKE ?
+                """
+                cur.execute(sql_select_query, (f'%{search_term}%', f'%{search_term}%', f'%{search_term}%'))
+            else:
+                sql_select_query = "SELECT * FROM hire;"
+                cur.execute(sql_select_query)
+        else:
+            sql_select_query = "SELECT * FROM hire;"
+            cur.execute(sql_select_query)
+
+        hire_details = cur.fetchall()
+        
+        # Close cursor and connection
+        cur.close()
+        conn.close()
+
+        return render_template("hire.html", hires=hire_details)
+
+    except sqlite3.Error as e:
+        # Log the error for debugging
+        print("Error:", e)
+        # Close the database connection
+        conn.close()
+        return "An error occurred while processing your request."
+
+
+
 @app.route('/add_hire', methods=['GET', 'POST'])
 def add_hire():
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM vehicle')
-    vehicles = cursor.fetchall()
-    cursor.execute('SELECT * FROM customer')
-    customers = cursor.fetchall()
-    
     if request.method == 'POST':
-        agreement_number = request.form['agreement_number']
-        vehicle_id = request.form['vehicle_id']
-        customer_id = request.form['customer_id']
-        out_date = request.form['out_date']
-        out_mileage = request.form['out_mileage']
-        out_location = request.form['out_location']
-        out_time = request.form['out_time']
-        out_fuel_reading = request.form['out_fuel_reading']
-        in_due_date = request.form['in_due_date']
-        in_time = request.form['in_time']
-        in_adblue = request.form['in_adblue']
-        in_mileage = request.form['in_mileage']
-        in_fuel_reading = request.form['in_fuel_reading']
-        extension_to = request.form['extension_to']
-        hirer_signature = request.form['hirer_signature']
-        on_behalf_of = request.form['on_behalf_of']
-        agreement_number = request.form['agreement_number']
+        # Retrieve form data
+        agreement_number = request.form.get('agreement_number')
+        vehicle_id = request.form.get('vehicle_id')
+        customer_id = request.form.get('customer_id')
+        out_date = request.form.get('out_date')
+        out_mileage = request.form.get('out_mileage')
+        out_location = request.form.get('out_location')
+        out_time = request.form.get('out_time')
+        out_fuel_reading = request.form.get('out_fuel_reading')
+        in_due_date = request.form.get('in_due_date')
+        in_time = request.form.get('in_time')
+        in_adblue = request.form.get('in_adblue')
+        in_mileage = request.form.get('in_mileage')
+        in_fuel_reading = request.form.get('in_fuel_reading')
+        extension_to = request.form.get('extension_to')
+        hirer_signature = request.form.get('hirer_signature')
+        on_behalf_of = request.form.get('on_behalf_of')
         
-        cursor.execute('''
-            INSERT INTO hire (
-                vehicle_id, customer_id, out_date, out_mileage, out_location, out_time,
-                out_fuel_reading, in_due_date, in_time, in_adblue, in_mileage, in_fuel_reading,
-                extension_to, hirer_signature, on_behalf_of
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
-        ''', (
-            agreement_number, vehicle_id, customer_id, out_date, out_mileage, out_location, out_time,
-            out_fuel_reading, in_due_date, in_time, in_adblue, in_mileage, in_fuel_reading,
-            extension_to, hirer_signature, on_behalf_of
-        ))
-        conn.commit()
+        # Establish a connection to the database
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
         
-        return redirect(url_for('index'))
+        try:
+            # Execute SQL query to insert the new hire entry
+            cursor.execute('''
+                INSERT INTO hire (
+                    agreement_number, vehicle_id, customer_id, out_date, out_mileage, out_location,
+                    out_time, out_fuel_reading, in_due_date, in_time, in_adblue, in_mileage,
+                    in_fuel_reading, extension_to, hirer_signature, on_behalf_of
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (
+                agreement_number, vehicle_id, customer_id, out_date, out_mileage, out_location,
+                out_time, out_fuel_reading, in_due_date, in_time, in_adblue, in_mileage,
+                in_fuel_reading, extension_to, hirer_signature, on_behalf_of
+            ))
+            
+            # Commit the transaction to save the changes
+            conn.commit()
+            
+            # Close the database connection
+            cursor.close()
+            conn.close()
+            
+            # Redirect to the home page or any other desired page
+            return redirect(url_for('index'))
+        
+        except sqlite3.Error as e:
+            # Log the error for debugging
+            print("Error:", e)
+            # Rollback changes if there's an error
+            conn.rollback()
+            return "An error occurred while processing your request."
     
-    return render_template('add_hire.html', vehicles=vehicles, customers=customers)
-   
-
-
-from flask import render_template
+    # Render the add hire form template
+    return render_template('add_hire.html')
 
 @app.route('/print_hire/<int:hire_id>')
 def print_hire(hire_id):
@@ -467,6 +520,9 @@ def search():
 def print_customer(id):
     customer = customer.query.get_or_404(id)
     return render_template('print.html', customer=customer)
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,12 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <li><a href="print_hire">Print Hire Agreement</a></li>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %} Hire Details {% endblock %}
+
+{% block content %}
+  
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Agreement Number</th>
+                <th>Vehicle ID</th>
+                <th>Customer ID</th>
+                <!-- Add more table headers for other hire details -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for hire in hires %}
+            <tr>
+                <td>{{ hire[0] }}</td> <!-- Assuming the first column is agreement_number -->
+                <td>{{ hire[1] }}</td> <!-- Assuming the second column is vehicle_id -->
+                <td>{{ hire[2] }}</td> 
+                <td>{{ hire[3] }}</td> 
+                <td>{{ hire[4] }}</td> 
+                <td>{{ hire[5] }}</td> 
+                <td>{{ hire[6] }}</td>
+                <td>{{ hire[7] }}</td> <!-- Assuming the first column is agreement_number -->
+                <td>{{ hire[8] }}</td> <!-- Assuming the second column is vehicle_id -->
+                <td>{{ hire[9] }}</td> 
+                <td>{{ hire[10] }}</td> 
+                <td>{{ hire[11] }}</td> 
+                <td>{{ hire[12] }}</td> 
+                <td>{{ hire[13] }}</td>
+                <td>{{ hire[14] }}</td> <!-- Assuming the first column is agreement_number -->
+                <td>{{ hire[15] }}</td> <!-- Assuming the second column is vehicle_id -->
+                <td>{{ hire[16] }}</td> 
+                <td>{{ hire[17] }}</td> 
+                <td>{{ hire[18] }}</td> 
+                <td>{{ hire[19] }}</td> 
+                <td>{{ hire[20] }}</td>
+                 <!-- Assuming the third column is customer_id -->
+                <!-- Add more table cells for other hire details -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endblock %}
