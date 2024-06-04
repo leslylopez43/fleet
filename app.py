@@ -45,7 +45,7 @@ def init_db():
         )
     ''')
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS hire (
+        CREATE TABLE IF NOT EXISTS hire_new (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             agreement_number TEXT UNIQUE,  -- Make agreement_number unique
             registration_number INTEGER NOT NULL,
