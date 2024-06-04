@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Update Customer{% endblock %}
+
+{% block content %}
+<h1>Update Customer</h1>
+<form method="POST">
+    <label for="registration_number">Name:</label>
+    <input type="text" id="Name" name="name" value="{{ customer.name }}" required><br>
+    <label for="make">Licence:</label>
+    <input type="text" id="license" name="license" value="{{ customer.license }}" required><br>
+    <label for="model">Phone:</label>
+    <input type="text" id="phone" name="phone" value="{{ customer.phone }}" required><br>
+    <label for="colour">Address:</label>
+    <input type="text" id="address" name="address" value="{{ customer.address }}" required><br>
+    <label for="mileage">From Date:</label>
+    <input type="text" id="from_date" name="from_date" value="{{ customer.from_date }}" required><br>
+    <label for="fuel">EXP:</label>
+    <input type="text" id="exp_date" name="exp_date" value="{{ customer.exp_date }}" required><br>
+    <label for="mileage">DOB:</label>
+    <input type="text" id="dob" name="dob" value="{{ customer.dob }}" required><br>
+    <button type="submit">Update Customer</button>
+</form>
+<a href="/">Back to Home</a>
+{% endblock %}

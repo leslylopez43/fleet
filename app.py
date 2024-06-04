@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for, send_file
-
+from flask import Flask, render_template, request, redirect, url_for, make_response, send_file 
+from flask_weasyprint import HTML, render_pdf
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+from io import BytesIO
 import sqlite3
-import io
 import os
+
 
 
 app = Flask(__name__)
@@ -299,9 +300,12 @@ def add_hire():
     return render_template('add_hire.html', vehicles=vehicles, customers=customers)
    
 
+
+from flask import render_template
+
 @app.route('/print_hire/<int:hire_id>')
 def print_hire(hire_id):
-    conn = sqlite3.connect('database.db')
+    conn = get_db()
     cursor = conn.cursor()
     cursor.execute('''
         SELECT h.*, v.registration_number, v.make, v.model, v.colour, v.fuel, 
@@ -315,49 +319,9 @@ def print_hire(hire_id):
     conn.close()
 
     if hire_details:
-        # Create a PDF buffer
-        buffer = BytesIO()
+        return render_template('print_hire.html', hire_details=hire_details)
 
-        # Create a PDF canvas
-        pdf = canvas.Canvas(buffer)
 
-        # Write content to PDF
-        pdf.drawString(100, 750, f"Registration Number: {hire_details[7]}")
-        pdf.drawString(100, 730, f"Customer Name: {hire_details[8]}")
-        pdf.drawString(100, 710, f"Start Date: {hire_details[3]}")
-        pdf.drawString(100, 690, f"End Date: {hire_details[4]}")
-
-        # Save PDF to buffer
-        pdf.save()
-
-        # Move buffer pointer to the beginning
-        buffer.seek(0)
-
-        # Return PDF file as a response
-        return send_file(buffer, as_attachment=True, attachment_filename="hire_agreement.pdf")
-
-    else:
-        return "Hire details not found"
-@app.route('/print')
-def print_page():
-    # Fetch data or render the template as needed
-    data = {
-        'title': 'Printable Page',
-        'content': 'This is the content to be printed.'
-    }
-
-    # Render the HTML template with the data
-    rendered_html = render_template('printable_page.html', data=data)
-
-    # Convert the HTML to PDF using Flask-WeasyPrint
-    pdf = render_pdf(HTML(string=rendered_html))
-
-    # Create a response with the PDF content
-    response = make_response(pdf)
-    response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = 'inline; filename=printable_page.pdf'
-
-    return response
 
 
 
