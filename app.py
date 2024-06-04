@@ -240,7 +240,7 @@ def update_customer(id):
     customer = cursor.fetchone()
     conn.close()
 
-    return render_template('update_customer.html', customer=customer)
+    return render_template('message.html', customer=customer)
 
 
 @app.route('/search_customer', methods=['POST'])
