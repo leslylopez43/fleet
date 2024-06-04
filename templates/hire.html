@@ -3,16 +3,34 @@
 {% block title %} Hire Details {% endblock %}
 
 {% block content %}
-  
+<h1>Hire Details</h1>
+<form action="{{ url_for('hire') }}" method="POST">
+    <label for="search">Search for HIRER:</label>
+    <input type="text" name="search" id="search">
+    <button type="submit">Search</button>
+</form>
     <table border="1">
         <thead>
             <tr>
                 <th>Agreement Number</th>
-                <th>Vehicle ID</th>
-                <th>Customer ID</th>
-                <!-- Add more table headers for other hire details -->
+                <th>Vehicle Registration</th>
+                <th>NAME</th>
+                <th>Out Date</th>
+                <th>Out Mileage</th>
+                <th>Out Location</th>
+                <th>Out Time</th>
+                <th>Out Fuel Reading</th>
+                <th>In Due Date</th>
+                <th>In Time</th>
+                <th>In AdBlue</th>
+                <th>In Mileage</th>
+                <th>In Fuel Reading</th>
+                <th>Extension to</th>
+                <th>Hirer Signature</th>
+                <th>On behalf of</th>
             </tr>
         </thead>
+        
         <tbody>
             {% for hire in hires %}
             <tr>
@@ -37,6 +55,8 @@
                 <td>{{ hire[18] }}</td> 
                 <td>{{ hire[19] }}</td> 
                 <td>{{ hire[20] }}</td>
+                <td>{{ hire[21] }}</td> 
+                <td>{{ hire[22] }}</td>
                  <!-- Assuming the third column is customer_id -->
                 <!-- Add more table cells for other hire details -->
             </tr>

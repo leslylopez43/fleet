@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vehicle Data</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Vehicle Data{% endblock %}
+
+{% block content %}
     <h1>Vehicle Data</h1>
     <form action="{{ url_for('vehicles') }}" method="POST">
         <label for="search">Search for Vehicle:</label>
@@ -41,3 +38,4 @@
             </tr>
             {% endfor %}
     
+            {% endblock %}

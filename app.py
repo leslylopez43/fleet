@@ -67,8 +67,6 @@ def init_db():
     ''')
     conn.commit()
     conn.close()
-
-
 conn = sqlite3.connect('your_database.db')
 cursor = conn.cursor()
 def create_tables():
