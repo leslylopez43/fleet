@@ -7,22 +7,12 @@
 
     <input type="text" name="agreement_number" placeholder="Agreement Number" required><br>
 
-    <label for="vehicle_id">Vehicle:</label>
-    <select id="vehicle_id" name="vehicle_id">
-        <option value="">Select Vehicle</option>
-        {% for vehicle in vehicles %}
-        <option value="{{ vehicle.id }}">{{ vehicle.registration_number }}</option>
-        {% endfor %}
-    </select>
-
-    <input type="text" id="vehicle_registration_number" name="vehicle_registration_number" style="display: none;" placeholder="Enter Registration Number" required><br>
-
-    <label for="customer_id">Customer:</label>
-    <select id="customer_id" name="customer_id">
-        {% for customer in customers %}
-        <option value="{{ customer['id'] }}">{{ customer['name'] }}</option>
-        {% endfor %}
-    </select><br>
+    <label for="vehicle">Vehicle:</label>
+    <input type="text" id="vehicle" name="vehicle" placeholder="Registration Number" required><br>
+    
+    <label for="name">Name:</label>
+    <input type="name" name="name" type="date" id="name" placeholder="Name" required><br>
+        
 
     <h2>Out (Agreement Starts)</h2>
     <label for="out_date">Date:</label>

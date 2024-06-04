@@ -48,8 +48,8 @@ def init_db():
         CREATE TABLE IF NOT EXISTS hire (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             agreement_number TEXT UNIQUE,  -- Make agreement_number unique
-            vehicle_id INTEGER NOT NULL,
-            customer_id INTEGER NOT NULL,
+            registration_number INTEGER NOT NULL,
+            name INTEGER NOT NULL,
             out_date TEXT,
             out_mileage TEXT,
             out_location TEXT,
@@ -62,9 +62,7 @@ def init_db():
             in_fuel_reading TEXT,
             extension_to TEXT,
             hirer_signature TEXT,
-            on_behalf_of TEXT,
-            FOREIGN KEY(vehicle_id) REFERENCES vehicle(id),
-            FOREIGN KEY(customer_id) REFERENCES customer(id)
+            on_behalf_of TEXT
         )
     ''')
     conn.commit()
@@ -309,8 +307,8 @@ def add_hire():
     if request.method == 'POST':
         # Retrieve form data
         agreement_number = request.form.get('agreement_number')
-        vehicle_id = request.form.get('vehicle_id')
-        customer_id = request.form.get('customer_id')
+        registration_number = request.form.get('registration_number')
+        name = request.form.get('name')
         out_date = request.form.get('out_date')
         out_mileage = request.form.get('out_mileage')
         out_location = request.form.get('out_location')
@@ -333,12 +331,12 @@ def add_hire():
             # Execute SQL query to insert the new hire entry
             cursor.execute('''
                 INSERT INTO hire (
-                    agreement_number, vehicle_id, customer_id, out_date, out_mileage, out_location,
+                    agreement_number, registration_number, name, out_date, out_mileage, out_location,
                     out_time, out_fuel_reading, in_due_date, in_time, in_adblue, in_mileage,
                     in_fuel_reading, extension_to, hirer_signature, on_behalf_of
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
-                agreement_number, vehicle_id, customer_id, out_date, out_mileage, out_location,
+                agreement_number, registration_number, name, out_date, out_mileage, out_location,
                 out_time, out_fuel_reading, in_due_date, in_time, in_adblue, in_mileage,
                 in_fuel_reading, extension_to, hirer_signature, on_behalf_of
             ))
@@ -479,42 +477,55 @@ def get_db_connection():
     return conn
     
 
+
 @app.route('/search', methods=['GET'])
 def search_form():
     return render_template('search.html')
 
+
+
 @app.route('/search', methods=['POST'])
 def search():
     name = request.form.get('name', '').strip()
-    vehicle_details = request.form.get('registration_number', '').strip()
+    registration_number = request.form.get('registration_number', '').strip()
     date_of_hire = request.form.get('date_of_hire', '').strip()
 
-    query = "SELECT * FROM customer WHERE 1=1"
-    params = []
+    customer_query = "SELECT * FROM customer WHERE 1=1"
+    vehicle_query = "SELECT * FROM vehicle WHERE 1=1"
+    customer_params = []
+    vehicle_params = []
 
     if name:
-        query += " AND name LIKE ?"
-        params.append(f"%{name}%")
+        customer_query += " AND name LIKE ?"
+        customer_params.append(f"%{name}%")
 
-    query = "SELECT * FROM vehicle WHERE 1=1"
-    params = []
-    if vehicle_details:
-        query += " AND vehicle_details LIKE ?"
-        params.append(f"%{registration_number}%")
+    if registration_number:
+        vehicle_query += " AND vehicle_details LIKE ?"
+        vehicle_params.append(f"%{registration_number}%")
+
     if date_of_hire:
         try:
             date = datetime.strptime(date_of_hire, '%Y-%m-%d')
-            query += " AND date_of_hire = ?"
-            params.append(date_of_hire)
+            customer_query += " AND date_of_hire = ?"
+            vehicle_query += " AND date_of_hire = ?"
+            customer_params.append(date_of_hire)
+            vehicle_params.append(date_of_hire)
         except ValueError:
             pass
 
     conn = get_db_connection()
-    cur = conn.execute(query, params)
-    customer = cur.fetchall()
+    customer_cur = conn.execute(customer_query, customer_params)
+    vehicle_cur = conn.execute(vehicle_query, vehicle_params)
+
+    customer = customer_cur.fetchall()
+    vehicle = vehicle_cur.fetchall()
+
     conn.close()
 
-    return render_template('result.html', customers=customer)
+    return render_template('result.html', customer=customer, vehicles=vehicle)
+
+
+
 
 @app.route('/print/<int:id>', methods=['GET'])
 def print_customer(id):

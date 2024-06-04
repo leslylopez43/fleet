@@ -1,32 +1,25 @@
 {% extends "base.html" %}
 
-{% block title %}result Customer{% endblock %}
+{% block title %}Search Results{% endblock %}
 
 {% block content %}
+<h1>Search Results</h1>
 
+<!-- Display customer search results -->
+<h2>Customers</h2>
+<ul>
+    {% for customer in customers %}
+    <li>{{ customer.name }} - {{ customer.vehicle_details }} - {{ customer.date_of_hire }}</li>
+    {% endfor %}
+</ul>
 
-<head>
-    <title>Search Results</title>
-</head>
-<body>
-    <h1>Search Results</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Vehicle Details</th>
-                <th>Date of Hire</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for customer in customers %}
-            <tr>
-                <td>{{ customer['name'] }}</td>
-                <td>{{ customer['vehicle_details'] }}</td>
-                <td>{{ customer['date_of_hire'] }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<!-- Display vehicle search results -->
+<h2>Vehicles</h2>
+<ul>
+    {% for vehicle in vehicles %}
+    <li>{{ vehicle.vehicle_details }} - {{ vehicle.date_of_hire }}</li>
+    {% endfor %}
+</ul>
+
 
 {% endblock %}
