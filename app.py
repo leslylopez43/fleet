@@ -44,7 +44,7 @@ cursor = conn.cursor()
 
 # Define the SQL statement to create a new table
 create_table_query = '''
-CREATE TABLE IF NOT EXISTS page (
+CREATE TABLE IF NOT EXISTS hire (
      id INTEGER PRIMARY KEY,
     registration_number TEXT,
     name TEXT,
@@ -109,10 +109,9 @@ def init_db():
     ''')
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS hire (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            agreement_number TEXT UNIQUE,  -- Make agreement_number unique
-            registration_number TEXT NOT NULL,
-            name TEXT NOT NULL,
+            id INTEGER PRIMARY KEY,
+            registration_number TEXT,
+            name TEXT,
             out_date TEXT,
             out_mileage TEXT,
             out_location TEXT,
