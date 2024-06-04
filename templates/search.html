@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Update Customer{% endblock %}
+
+{% block content %}
+
+<h2 class="mt-4">Customer List</h2>
+<ul class="list-group">
+    {% for customer in customers %}
+        <li class="list-group-item">
+            {{ customer.name }} - {{ customer.vehicle_details }} - {{ customer.date_of_hire.strftime('%Y-%m-%d') }}
+            <a href="/print/{{ customer.id }}" class="btn btn-secondary btn-sm float-right">Print</a>
+        </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

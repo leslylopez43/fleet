@@ -3,6 +3,7 @@ from flask_weasyprint import HTML, render_pdf
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from io import BytesIO
+from datetime import datetime
 import sqlite3
 import os
 
@@ -240,7 +241,7 @@ def update_customer(id):
     customer = cursor.fetchone()
     conn.close()
 
-    return render_template('message.html', customer=customer)
+    return render_template('update_customer.html', customer=customer)
 
 
 @app.route('/search_customer', methods=['POST'])
@@ -410,5 +411,51 @@ def update_lessor(id):
     conn.close()
     return render_template('update_lessor.html', lessor=lessor)
 
+
+
+def get_db_connection():
+    conn = sqlite3.connect('database.db')
+    conn.row_factory = sqlite3.Row
+    return conn
+
+@app.route('/search', methods=['POST'])
+def search():
+    name = request.form.get('name', '').strip()
+    vehicle_details = request.form.get('vehicle_details', '').strip()
+    date_of_hire = request.form.get('date_of_hire', '').strip()
+
+    query = "SELECT * FROM customer WHERE 1=1"
+    params = []
+
+    if name:
+        query += " AND name LIKE ?"
+        params.append(f"%{name}%")
+    if vehicle_details:
+        query += " AND vehicle_details LIKE ?"
+        params.append(f"%{vehicle_details}%")
+    if date_of_hire:
+        try:
+            date = datetime.strptime(date_of_hire, '%Y-%m-%d')
+            query += " AND date_of_hire = ?"
+            params.append(date_of_hire)
+        except ValueError:
+            pass
+
+    conn = get_db_connection()
+    cursor = conn.execute(query, params)
+    customers = cursor.fetchall()
+    conn.close()
+
+    return render_template('index.html', customers=customers)
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
+@app.route('/print/<int:id>', methods=['GET'])
+def print_customer(id):
+    customer = Customer.query.get_or_404(id)
+    return render_template('print.html', customer=customer)
+
 if __name__ == '__main__':
     app.run(debug=True)
+
